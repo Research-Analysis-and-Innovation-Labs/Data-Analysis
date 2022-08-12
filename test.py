@@ -1,4 +1,4 @@
 def checkfunction(x):
     return x**2
 
-print(checkfunction(5),'ko')
+print(checkfunction(5))
