@@ -1,0 +1,14 @@
+class DataTransformation:
+    '''tranform database'''
+    def __init__(self,datafile):
+        self.data=datafile
+        self.keys=self.data.keys()
+        self.shape=self.data.shape
+        self.description=self.data.describe()
+        self.information=self.data.info()
+        self.null_rows=self.data[self.data.isna().all(axis=1)]
+        self.null_columns=self.data.columns[self.data.isnull().any()]
+        
+        
+    
+    

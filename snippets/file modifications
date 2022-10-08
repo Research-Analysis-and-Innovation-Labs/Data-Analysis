@@ -1,0 +1,53 @@
+class FileModification:
+    '''modify file names, location, create dataframes'''
+    def __init__(self,folder_address):
+        '''get current working directory address'''
+        self.address=folder_address
+    
+    def original_file(self):
+        '''get original file names'''
+        os.chdir(self.address)
+        '''take only file names'''
+        self.file_names=[file for file in os.listdir() if os.path.isfile(file)]
+        return self.file_names
+    
+    def rename_file_names(self):
+        '''rename file names, save to a new directory'''
+        source=self.address
+        '''create directory'''
+        try:
+            os.chdir(source)
+            destination=os.path.join(source,'modified') 
+            os.mkdir(destination) # new folder created
+        except:
+            pass
+        '''rename file names'''
+        for file in self.file_names:
+            source_file=source+'\\'+file
+            '''modify file name, fetch only dates'''
+            '''file modification --starts--'''
+            newfilename="-".join([item for item in os.path.splitext(file)[0].split('-') if item.isdigit()])+'.csv'
+            '''file modification --ends--'''
+            final_file=destination+'\\'+newfilename
+            try:
+                shutil.copy2(source_file,final_file)
+            except:
+                pass
+        self.modified_destination=destination
+        return self.modified_destination
+    
+    def new_files_read(self):
+        os.chdir(self.modified_destination)
+        self.new_files=os.listdir()
+        return self.new_files
+    
+    def create_dataframes(self):
+        os.chdir(self.modified_destination)
+        self.dataframe={os.path.splitext(file)[0]:pd.read_csv(self.modified_destination+'//'+file) for file in self.new_files}
+        return self.dataframe
+    
+    def get_data(self):
+        self.original_file()
+        self.rename_file_names()
+        self.new_files_read()
+        return self.create_dataframes()
